@@ -465,12 +465,19 @@ async function runUpload() {
     setStatus('loading', 'Processando...', steps);
 
     // 2 — Pedir signed URL
+    console.log('[getUploadUrl] Iniciando requisição...');
     const urlRes = await fetch(`${endpoint}/getUploadUrl`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json', 'x-api-key': apikey },
       body: JSON.stringify({ projeto, filename: filename.endsWith('.pdf') ? filename : filename + '.pdf', tag1, tag2, tag3 })
     });
     const urlData = await urlRes.json();
+    console.log('[getUploadUrl] Response status:', urlRes.status);
+    console.log('[getUploadUrl] Response headers:', {
+      contentType: urlRes.headers.get('content-type'),
+      contentLength: urlRes.headers.get('content-length')
+    });
+    console.log('[getUploadUrl] Response body completo:', urlData);
     if (!urlData.success) throw new Error(urlData.error || 'Erro ao obter URL');
 
     steps[1].state = 'done';
@@ -479,12 +486,26 @@ async function runUpload() {
     setStatus('loading', 'Processando...', steps);
 
     // 3 — Upload direto
+    console.log('[PUT Upload] Iniciando upload de arquivo...');
+    console.log('[PUT Upload] Signed URL:', urlData.uploadUrl);
+    console.log('[PUT Upload] Content-Type sendo usado:', 'application/octet-stream');
+    console.log('[PUT Upload] Tamanho do arquivo (bytes):', pdfBlob.size);
     const putRes = await fetch(urlData.uploadUrl, {
       method: 'PUT',
       headers: { 'Content-Type': 'application/octet-stream' },
       body: pdfBlob
     });
-    if (!putRes.ok) throw new Error(`Falha no upload: HTTP ${putRes.status}`);
+    console.log('[PUT Upload] Status HTTP retornado:', putRes.status);
+    console.log('[PUT Upload] Response headers:', {
+      contentType: putRes.headers.get('content-type'),
+      etag: putRes.headers.get('etag'),
+      contentLength: putRes.headers.get('content-length')
+    });
+    if (!putRes.ok) {
+      const errText = await putRes.text();
+      console.log('[PUT Upload] Response body (erro):', errText);
+      throw new Error(`Falha no upload: HTTP ${putRes.status}`);
+    }
 
     steps[2].state = 'done';
     steps[2].text = 'Arquivo enviado para o Storage';
@@ -492,12 +513,19 @@ async function runUpload() {
     setStatus('loading', 'Processando...', steps);
 
     // 4 — Confirmar
+    console.log('[confirmUpload] Iniciando confirmação...');
     const confirmRes = await fetch(`${endpoint}/confirmUpload`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json', 'x-api-key': apikey },
       body: JSON.stringify({ docId: urlData.docId })
     });
     const confirmData = await confirmRes.json();
+    console.log('[confirmUpload] Response status:', confirmRes.status);
+    console.log('[confirmUpload] Response headers:', {
+      contentType: confirmRes.headers.get('content-type'),
+      contentLength: confirmRes.headers.get('content-length')
+    });
+    console.log('[confirmUpload] Response body completo:', confirmData);
     if (!confirmData.success) throw new Error(confirmData.error || 'Erro na confirmação');
 
     steps[3].state = 'done';
