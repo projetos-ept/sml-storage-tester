@@ -1,3 +1,20 @@
+const CONTENT_TYPE_MAP = {
+  'pdf': 'application/pdf',
+  'jpg': 'image/jpeg',
+  'jpeg': 'image/jpeg',
+  'png': 'image/png',
+  'webp': 'image/webp',
+  'doc': 'application/msword',
+  'docx': 'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+  'xls': 'application/vnd.ms-excel',
+  'xlsx': 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+};
+
+function getContentType(filename) {
+  const ext = filename.split('.').pop().toLowerCase();
+  return CONTENT_TYPE_MAP[ext] || 'application/octet-stream';
+}
+
 function previewImg(input) {
   const preview = document.getElementById('preview');
   if (input.files && input.files[0]) {
@@ -105,13 +122,14 @@ async function runUpload() {
     setStatus('loading', 'Processando...', steps);
 
     // 3 — Upload direto
+    const contentType = getContentType(filename);
     console.log('[PUT Upload] Iniciando upload de arquivo...');
     console.log('[PUT Upload] Signed URL:', urlData.uploadUrl);
-    console.log('[PUT Upload] Content-Type sendo usado:', 'application/octet-stream');
+    console.log('[PUT Upload] Content-Type sendo usado:', contentType);
     console.log('[PUT Upload] Tamanho do arquivo (bytes):', pdfBlob.size);
     const putRes = await fetch(urlData.uploadUrl, {
       method: 'PUT',
-      headers: { 'Content-Type': 'application/octet-stream' },
+      headers: { 'Content-Type': contentType },
       body: pdfBlob
     });
     console.log('[PUT Upload] Status HTTP retornado:', putRes.status);
