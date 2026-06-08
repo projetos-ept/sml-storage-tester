@@ -222,6 +222,18 @@
   .btn-primary:active { transform: translateY(0); }
   .btn-primary:disabled { opacity: 0.5; cursor: not-allowed; transform: none; }
 
+  .btn-secondary {
+    background: transparent;
+    color: var(--accent2);
+    border: 1px solid var(--accent2);
+    font-size: 0.75rem;
+    padding: 0.6rem;
+  }
+
+  .btn-secondary:hover { background: rgba(79,209,197,0.1); border-color: var(--accent2); }
+  .btn-secondary:active { transform: scale(0.98); }
+  .btn-secondary:disabled { opacity: 0.5; cursor: not-allowed; }
+
   .status {
     margin-top: 1rem;
     border-radius: 8px;
@@ -386,6 +398,9 @@
       <label>x-api-key</label>
       <input type="text" id="apikey" placeholder="sua-chave-aqui">
     </div>
+    <button class="btn btn-secondary" id="btnQuickTest" style="margin-top: 0.75rem; width: 100%;">
+      ⚡ Teste Rápido
+    </button>
   </div>
 
   <!-- Limites e Formatos -->
