@@ -309,6 +309,62 @@
   }
 
   @keyframes spin { to { transform: rotate(360deg); } }
+
+  .info-box {
+    background: linear-gradient(135deg, rgba(79,209,197,0.05) 0%, rgba(124,106,247,0.05) 100%);
+    border: 1px solid rgba(79,209,197,0.2);
+    border-radius: 8px;
+    padding: 1rem;
+    margin-bottom: 1rem;
+  }
+
+  .info-title {
+    font-family: var(--mono);
+    font-size: 10px;
+    letter-spacing: 0.15em;
+    color: var(--accent2);
+    text-transform: uppercase;
+    margin-bottom: 0.75rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+
+  .info-content {
+    font-size: 0.8rem;
+    color: var(--text);
+    line-height: 1.6;
+  }
+
+  .limit-item {
+    margin-bottom: 0.5rem;
+    padding-left: 1rem;
+  }
+
+  .limit-item::before {
+    content: '•';
+    margin-left: -0.75rem;
+    margin-right: 0.5rem;
+    color: var(--accent2);
+  }
+
+  .format-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin-top: 0.5rem;
+  }
+
+  .format-tag {
+    background: rgba(124,106,247,0.15);
+    border: 1px solid rgba(124,106,247,0.3);
+    color: var(--accent);
+    padding: 0.25rem 0.5rem;
+    border-radius: 4px;
+    font-family: var(--mono);
+    font-size: 0.7rem;
+    font-weight: 700;
+  }
 </style>
 </head>
 <body>
@@ -329,6 +385,27 @@
     <div class="field">
       <label>x-api-key</label>
       <input type="text" id="apikey" placeholder="sua-chave-aqui">
+    </div>
+  </div>
+
+  <!-- Limites e Formatos -->
+  <div class="info-box">
+    <div class="info-title">⚡ Limites e Formatos</div>
+    <div class="info-content">
+      <div class="limit-item"><strong>Tamanho máximo:</strong> 10 MB</div>
+      <div class="limit-item" style="margin-top:0.75rem"><strong>Formatos aceitos:</strong>
+        <div class="format-list">
+          <span class="format-tag">PDF</span>
+          <span class="format-tag">JPG</span>
+          <span class="format-tag">JPEG</span>
+          <span class="format-tag">PNG</span>
+          <span class="format-tag">WEBP</span>
+          <span class="format-tag">DOC</span>
+          <span class="format-tag">DOCX</span>
+          <span class="format-tag">XLS</span>
+          <span class="format-tag">XLSX</span>
+        </div>
+      </div>
     </div>
   </div>
 
